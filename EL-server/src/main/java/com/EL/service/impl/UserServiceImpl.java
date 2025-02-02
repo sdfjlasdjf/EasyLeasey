@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         BeanUtils.copyProperties(userDTO,user);
         user.setStatus(StatusConstant.ENABLE);
-        user.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        user.setPassword(DigestUtils.md5DigestAsHex(userDTO.getPassword().getBytes()));
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.insert(user);

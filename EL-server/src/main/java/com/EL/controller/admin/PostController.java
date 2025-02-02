@@ -13,9 +13,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/post")
@@ -25,6 +27,9 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * Add Post
      * @param postDTO
@@ -33,7 +38,9 @@ public class PostController {
     @ApiOperation("Add Post")
     @PostMapping
     public Result save(@RequestBody PostDTO postDTO) {
+
         postService.save(postDTO);
+        cleanCache("rent:" + postDTO.getCategory() + ":" + postDTO.getLocation());
         return Result.success();
     }
 
@@ -43,7 +50,14 @@ public class PostController {
     @ApiOperation("GetPostbyLocation")
     @GetMapping("/getpostbylocation")
     public Result getPosts(GetPostDTO getPostDTO) {
-        List<Post> postResult = postService.getPosts(getPostDTO);
+        String key = "rent:" + getPostDTO.getCategory() + ":" + getPostDTO.getLocation();
+        List<Post> postResult = (List<Post>)redisTemplate.opsForValue().get(key);
+        if(postResult != null && postResult.size() > 0) {
+            return Result.success(postResult);
+        }
+
+        postResult = postService.getPosts(getPostDTO);
+        redisTemplate.opsForValue().set(key, postResult);
         return Result.success(postResult);
 
     }
@@ -82,7 +96,13 @@ public class PostController {
     @PutMapping("/update")
     public Result update(@RequestBody PostDTO postDTO) {
         postService.update(postDTO);
+        cleanCache("rent:" + postDTO.getCategory() + ":" + postDTO.getLocation());
         return Result.success();
+    }
+
+    private void cleanCache(String pattern){
+        Set key = redisTemplate.keys(pattern);
+        redisTemplate.delete(key);
     }
 
 }
