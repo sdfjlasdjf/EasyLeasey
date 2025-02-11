@@ -44,7 +44,7 @@ public class UserController {
 
 
     /**
-     * 登录
+     * login
      *
      * @param userLoginDTO
      * @return
@@ -75,14 +75,18 @@ public class UserController {
     }
 
     /**
-     * 退出
+     * logout
      *
      * @return
      */
     @PostMapping("/logout")
-    public Result<String> logout() {
-        return Result.success();
+    public Result<String> logout(@RequestHeader("Authorization") String token) {
+        if (token != null) {
+            stringRedisTemplate.delete(token);
+        }
+        return Result.success("Logged out successfully");
     }
+
 
     @GetMapping("/userInfo")
     public Result<User> getUserInfo(){
@@ -100,6 +104,13 @@ public class UserController {
     @PatchMapping("/updateAvatar")
     public Result updateAvatar(@RequestParam @URL String avatarUrl) {
         userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
+
+    @ApiOperation("Update Profile")
+    @PatchMapping("/update")
+    public Result updateProfile(UserDTO userDTO) {
+        userService.updateProfile(userDTO);
         return Result.success();
     }
 

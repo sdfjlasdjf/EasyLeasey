@@ -39,5 +39,7 @@ public class Post implements Serializable {
 
     private LocalDateTime updateTime;
 
+    private Integer price;
+
 
 }

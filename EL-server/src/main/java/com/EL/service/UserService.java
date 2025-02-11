@@ -35,4 +35,6 @@ public interface UserService {
     Result updatePwd(String oldpwd, String newpwd, long userId);
 
     String getUserLocation();
+
+    void updateProfile(UserDTO userDTO);
 }

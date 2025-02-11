@@ -79,6 +79,12 @@ public class UserServiceImpl implements UserService {
         userMapper.updateAvatar(avatarUrl,id);
     }
 
+
+    @Override
+    public void updateProfile(UserDTO userDTO) {
+        userMapper.updateProfile(userDTO.getId(),userDTO.getName(),userDTO.getIdNumber(),userDTO.getAge());
+    }
+
     @Override
     public User getUserInfo(){
         return userMapper.getById(BaseContext.getCurrentId());

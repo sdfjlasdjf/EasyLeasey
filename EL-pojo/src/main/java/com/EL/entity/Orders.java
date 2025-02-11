@@ -39,6 +39,7 @@ public class Orders implements Serializable {
 
     private Long id;
 
+    private Long postId;
     //订单号
     private String number;
 

@@ -52,4 +52,8 @@ public interface UserMapper {
 
     @Select("select location from user where id=#{userId}")
     String getUserLocation(Long userId);
+
+    @Update("update user set name=#{name},update_time=now(),id_number=#{idNumber}, age=#{age} where id=#{userId}")
+    void updateProfile(Long userId, String name, String idNumber, Integer age);
+
 }

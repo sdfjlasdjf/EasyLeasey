@@ -16,8 +16,11 @@
         <module>EL-common</module>
         <module>EL-pojo</module>
         <module>EL-server</module>
+        <module>post-service</module>
     </modules>
     <properties>
+        <springcloud>2024.0.0</springcloud>
+        <alibabacloud>2023.0.3.2</alibabacloud>
         <mybatis.spring>3.0.3</mybatis.spring>
         <lombok>1.18.34</lombok>
         <fastjson>1.2.76</fastjson>
@@ -53,7 +56,19 @@
                 <version>${fastjson}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${springcloud}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                <version>${alibabacloud}</version>
+            </dependency>
 
             <dependency>
                 <groupId>commons-lang</groupId>
